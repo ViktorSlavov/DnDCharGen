@@ -8,48 +8,92 @@ export interface NamedAPIResource extends APIResource {
     url: string;
 }
 
+export interface NamedAPIResourceReference {
+    name: string;
+    url: string;
+}
+
 export interface ClassAPIResource extends APIResource {
+    class: string;
+    url: string;
+}
+
+export interface ClassAPIResourceReference {
     class: string;
     url: string;
 }
 export interface Choice {
     choose: number;
     type: string;
-    from: Array<APIResource>;
+    from: Array<ClassAPIResourceReference | NamedAPIResourceReference>;
 }
 
 export interface Cost {
     quantity: number;
-    unit: CurrencyTypes;
+    unit: CURRENCY;
 }
 
-export enum CurrencyTypes {
-    Copper = 'cp',
-    Silver = 'sp',
-    Gold = 'gp',
-    Platinum = 'pp',
+export enum CURRENCY {
+    COPPER = 'cp',
+    SILVER = 'sp',
+    GOLD = 'gp',
+    PLATINUM = 'pp',
 }
 
+export enum SIZE {
+    SMALL = 'Small',
+    MEDIUM = 'Medium',
+    LARGE = 'Large'
+}
+
+export enum PROFICIENCY_TYPES {
+    WEAPON = 'Weapons'
+}
+export interface Proficiency extends NamedAPIResource {
+    type: PROFICIENCY_TYPES;
+    classes: Array<NamedAPIResourceReference>;
+    races: Array<Race>;
+}
+
+export interface Race extends NamedAPIResource {
+    speed: number;
+    ability_bonuses: Array<number>;
+    alignment: string;
+    size: SIZE;
+    size_description?: string;
+    starting_proficiencies?: Array<NamedAPIResourceReference>;
+    starting_proficiency_options?: Choice;
+    languages?: Array<NamedAPIResourceReference>;
+    language_desc?: string;
+    traits?: Array<NamedAPIResourceReference>;
+    subraces?: Array<NamedAPIResourceReference>; 
+}
 export interface Equipment extends NamedAPIResource {
-    equipment_category: EquipmentCategory;
+    equipment_category: EQUIPMENT_CATEGORY;
     cost: Cost;
     weight?: number;
+    desc?: string;
 }
-export enum EquipmentCategory {
-    Weapon = 'Weapon',
-    Armor = 'Armor',
-    AdventuringGear = 'Adventuring Gear',
+export enum EQUIPMENT_CATEGORY {
+    WEAPON = 'Weapon',
+    ARMOR = 'Armor',
+    ADVENTURING_GEAR = 'Adventuring Gear',
+}
+
+export enum WEAPON_CATEGORY {
 
 }
 
-export enum WeaponCategory {
-
+export interface Class extends NamedAPIResource {
+    hit_die: number;
+    proficiency_choices: Choice;
+    proficiencies: Array<Proficiency>;
 }
 
 export interface WeaponDamage {
     dice_count: number;
     dice_value: number;
-    damage_type: NamedAPIResource;
+    damage_type: NamedAPIResourceReference;
 }
 
 export interface WeaponRange {
@@ -59,6 +103,6 @@ export interface WeaponRange {
 }
 
 export interface Weapon extends NamedAPIResource {
-    equipment_category: EquipmentCategory;
-    weapon_category: WeaponCategory;
+    equipment_category: EQUIPMENT_CATEGORY;
+    weapon_category: WEAPON_CATEGORY;
 }
