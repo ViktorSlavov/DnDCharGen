@@ -1,3 +1,4 @@
-<p>
-  main works!
-</p>
+<div class="class--class" *ngFor="let class of classes$ | async">
+  <a href="{{class.url}}">{{class.name}}</a>
+</div>
+<button (click)="refresh()">Get Classes</button>

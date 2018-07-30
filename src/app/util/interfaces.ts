@@ -66,7 +66,7 @@ export interface Race extends NamedAPIResource {
     languages?: Array<NamedAPIResourceReference>;
     language_desc?: string;
     traits?: Array<NamedAPIResourceReference>;
-    subraces?: Array<NamedAPIResourceReference>; 
+    subraces?: Array<NamedAPIResourceReference>;
 }
 export interface Equipment extends NamedAPIResource {
     equipment_category: EQUIPMENT_CATEGORY;
@@ -97,12 +97,38 @@ export interface WeaponDamage {
 }
 
 export interface WeaponRange {
-    normal ?: number;
-    long ?: number;
-    short ?: number;
+    normal?: number;
+    long?: number;
+    short?: number;
 }
 
 export interface Weapon extends NamedAPIResource {
     equipment_category: EQUIPMENT_CATEGORY;
     weapon_category: WEAPON_CATEGORY;
+}
+
+export enum LANGUAGE_TYPE {
+    COMMON = 'Common',
+    EXOTIC = 'Exotic'
+}
+
+export interface Langauge extends NamedAPIResource {
+    type: LANGUAGE_TYPE;
+    typical_speakers?: Array<string>;
+    script: string;
+}
+
+export enum CLASSES {
+    BARBARIAN = 'Barbarian',
+    BARD = 'Bard',
+    CLERIC = 'Cleric',
+    DRUID = 'Druid',
+    FIGHTER = 'Fighter',
+    MONK = 'Monk',
+    PALADIN = 'Paladin',
+    RANGER = 'Ranger',
+    ROGUE = 'Rogue',
+    SORCERER = 'Sorcerer',
+    WARLOCK = 'Warlock',
+    WIZARD = 'Wizard'
 }
