@@ -1,4 +1,8 @@
-<div class="class--class" *ngFor="let class of classes$ | async">
+<div class="class--class" *ngFor="let class of classes$">
   <a href="{{class.url}}">{{class.name}}</a>
+  <button (click)="updateActiveClass(class.url)">Show more</button>
 </div>
 <button (click)="refresh()">Get Classes</button>
+<div>
+<app-class-display *ngIf="activeClass" [currentClass]="activeClass"></app-class-display>
+</div>

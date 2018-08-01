@@ -1,7 +1,8 @@
 import { Component, OnInit, Inject } from '@angular/core';
 import { RemoteService, ENDPOINTS } from '../services/remoteData.service';
-import { NamedAPIResourceReference } from '../util/interfaces';
+import { NamedAPIResourceReference, ClassReference } from '../util/interfaces';
 import { Observable } from '../../../node_modules/rxjs';
+import { take } from '../../../node_modules/rxjs/operators';
 
 interface RequestResponse {
   count: number;
@@ -15,7 +16,8 @@ interface RequestResponse {
 })
 export class MainComponent implements OnInit {
 
-  public classes$: Observable<Array<NamedAPIResourceReference>>;
+  public activeClass: NamedAPIResourceReference;
+  public classes$: Array<NamedAPIResourceReference>;
   constructor(@Inject(RemoteService) private remoteService: RemoteService) { }
 
   genericDataCallback(data: RequestResponse) {
@@ -24,11 +26,21 @@ export class MainComponent implements OnInit {
      });
   }
 
+  updateActiveClass(url: string) {
+    this.remoteService.getAbsoluteURL(url).pipe(take(2)).subscribe((e) => {
+      this.activeClass = <ClassReference>e;
+      console.log(this.activeClass, e);
+    });
+
+  }
   refresh() {
-    this.classes$ = this.remoteService.getEndpoints('CLASSES');
+    this.remoteService.getEndpoints('CLASSES').pipe(take(1)).subscribe((e) => {
+      this.classes$ = e;
+    });
   }
   ngOnInit() {
-    this.classes$ = this.remoteService.getEndpoints('CLASSES');
+    this.remoteService.getEndpoints('CLASSES').pipe(take(1)).subscribe((e) => {
+      this.classes$ = e;
+    });
   }
-
 }

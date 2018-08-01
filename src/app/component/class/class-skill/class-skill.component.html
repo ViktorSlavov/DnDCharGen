@@ -1,0 +1,24 @@
+<div class="class-skill">
+  <div class="class-skill__overview">
+    <div class="class-skill__name">
+      {{ name }}
+    </div>
+    <div class="class-skill__modifier">
+      <img class="class-skill__modifier--icon" src="{{ modifier.icon }}" />
+      <div class="class-skill__modifier--name">
+        <a href="{{ modifier.url }}">{{ modifier.name }}</a>
+      </div>
+    </div>
+  </div>
+  <div class="class-skill__body">
+    {{ description }}
+  </div>
+  <div class="class-skill__classes">
+    <div *ngFor="let class of classes" class="class-skill__classes--container">
+      <div class="class-skill__classes--name">
+        <a href="{{class.url}}">{{ class.name }}</a>
+      </div>
+      <img class="class-skill__classes--icon" src="{{ class.icon }}" />
+    </div>
+  </div>
+</div>

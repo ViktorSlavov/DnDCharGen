@@ -5,14 +5,14 @@ import { FormsModule } from '@angular/forms';
 import { HttpModule } from '@angular/http';
 import { RemoteService } from './services/remoteData.service';
 import { AppComponent } from './app.component';
-import { MainComponent } from './main/main.component';
-
+import { MainModule } from './main/main.module';
+import { ClassModule } from './component/class/class.module';
 @NgModule({
   declarations: [
     AppComponent,
-    MainComponent
   ],
   imports: [
+    MainModule,
     BrowserModule,
     FormsModule,
     HttpModule,

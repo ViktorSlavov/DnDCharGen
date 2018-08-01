@@ -84,10 +84,15 @@ export enum WEAPON_CATEGORY {
 
 }
 
+export interface Skill extends NamedAPIResourceReference {
+    desc?: string[];
+    ability_score: NamedAPIResourceReference;
+}
 export interface Class extends NamedAPIResource {
     hit_die: number;
     proficiency_choices: Choice;
     proficiencies: Array<Proficiency>;
+    skills: Array<Skill>;
 }
 
 export interface WeaponDamage {
@@ -131,4 +136,8 @@ export enum CLASSES {
     SORCERER = 'Sorcerer',
     WARLOCK = 'Warlock',
     WIZARD = 'Wizard'
+}
+
+export interface ClassReference extends NamedAPIResourceReference {
+    icon?: string;
 }

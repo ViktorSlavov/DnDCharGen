@@ -1,3 +1,13 @@
-<p>
-  class-display works!
-</p>
+<div class='class-display'>
+  <div class='class-display__overview'>
+    <img class='class-display__overview--image' src="{{ currentClass.image }}" />
+    <div class='class-display__overview--name'>
+      {{ currentClass.name }}
+    </div>
+  </div>
+  <div class='class-display__separator'></div>
+  <div class='class-display__skills'>
+    <app-class-skill *ngFor="let skill of currentClass.proficiencies" [name]="skill.name"
+    [description]="skill.description" [modifier]="skill.modifier" [classes]="skill.classes"></app-class-skill>
+  </div>
+</div>

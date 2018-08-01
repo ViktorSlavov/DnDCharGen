@@ -1,15 +1,19 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Input, AfterViewInit } from '@angular/core';
+import { Class } from '../../../util/interfaces';
 
 @Component({
   selector: 'app-class-display',
   templateUrl: './class-display.component.html',
   styleUrls: ['./class-display.component.css']
 })
-export class ClassDisplayComponent implements OnInit {
+export class ClassDisplayComponent implements AfterViewInit {
+  @Input()
+  public currentClass: Class;
 
   constructor() { }
 
-  ngOnInit() {
+  ngAfterViewInit() {
+    this.currentClass.skills = this.currentClass.proficiencies.filter()
   }
 
 }
