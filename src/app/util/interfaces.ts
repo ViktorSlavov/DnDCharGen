@@ -25,7 +25,7 @@ export interface ClassAPIResourceReference {
 export interface Choice {
     choose: number;
     type: string;
-    from: Array<ClassAPIResourceReference | NamedAPIResourceReference>;
+    from: Array<NamedAPIResourceReference>;
 }
 
 export interface Cost {
@@ -47,7 +47,10 @@ export enum SIZE {
 }
 
 export enum PROFICIENCY_TYPES {
-    WEAPON = 'Weapons'
+    WEAPON = 'Weapons',
+    SKILLS = 'Skills',
+    ARMOR = 'Armor',
+    EQUIPMENT = 'Equipment'
 }
 export interface Proficiency extends NamedAPIResource {
     type: PROFICIENCY_TYPES;
@@ -90,9 +93,9 @@ export interface Skill extends NamedAPIResourceReference {
 }
 export interface Class extends NamedAPIResource {
     hit_die: number;
-    proficiency_choices: Choice;
+    proficiency_choices: Choice[];
     proficiencies: Array<Proficiency>;
-    skills: Array<Skill>;
+    skills?: Array<Skill>;
 }
 
 export interface WeaponDamage {

@@ -27,7 +27,7 @@ export class MainComponent implements OnInit {
   }
 
   updateActiveClass(url: string) {
-    this.remoteService.getAbsoluteURL(url).pipe(take(2)).subscribe((e) => {
+    this.remoteService.getAbsoluteURL(url).pipe(take(1)).subscribe((e) => {
       this.activeClass = <ClassReference>e;
       console.log(this.activeClass, e);
     });

@@ -13,7 +13,7 @@ export class ClassDisplayComponent implements AfterViewInit {
   constructor() { }
 
   ngAfterViewInit() {
-    this.currentClass.skills = this.currentClass.proficiencies.filter()
+    console.log(this.currentClass);
   }
 
 }

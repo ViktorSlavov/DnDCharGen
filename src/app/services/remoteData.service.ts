@@ -1,9 +1,8 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject, Observable } from 'rxjs';
-import { map, shareReplay } from 'rxjs/operators';
+import { map, shareReplay, take } from 'rxjs/operators';
 import { Http } from '@angular/http';
-import { NamedAPIResourceReference } from '../util/interfaces';
-import { take } from '../../../node_modules/rxjs/operator/take';
+import { NamedAPIResourceReference, Class, PROFICIENCY_TYPES, Skill } from '../util/interfaces';
 
 const CACHE_SIZE = 1;
 export const ENDPOINTS = {
@@ -72,24 +71,17 @@ export class RemoteService {
         );
     }
 
-    private getAbsoulteURL(url: string) {
-        return this.http.get(url).pipe(
-            map(response => response.json()),
-            map(object => this.enhanceWithIcon(object))
-        );
-    }
-
     public enhanceWithIcon(obj): void {
         obj.icon = `${this.picturesUrl}${obj.name}`;
         return obj;
     }
-
-    getData(url) {
-        return this.http.get(this.url).pipe(
-            map(response => response.json())
+    classPipe(obj: Class): Class {
+        console.log("In class pipe");
+        obj.skills = obj.proficiency_choices[0].from.filter(e => e.name.indexOf('Skill: ') > -1).map(
+            (e) => this.getSkills(e.url).pipe(take(1))
         );
+        return obj;
     }
-
     buildEndpointURL(endpoint: string): string {
         return `${this.url}${endpoint}/`;
     }
@@ -97,27 +89,33 @@ export class RemoteService {
     private checkAbsoluteCache(url): Observable<NamedAPIResourceReference> {
         const resourceBase = url.split(this.url)[1].split('/')[0];
         const resourceSpecific = url.split(this.url)[1].split('/')[1];
-        if (this._absoluteCache[resourceBase]) {
-            return this._absoluteCache[resourceBase][resourceSpecific] || null;
-        }
-        return null;
-    }
-    private cacheAbsoluteURL(url): void {
-        const resourceBase = url.split(this.url)[1].split('/')[0];
-        const resourceSpecific = url.split(this.url)[1].split('/')[1];
         if (!this._absoluteCache[resourceBase]) {
             this._absoluteCache[resourceBase] = {};
         }
-        this._absoluteCache[resourceBase][resourceSpecific] = this.getAbsoulteURL(url).pipe(shareReplay(CACHE_SIZE));
+        return this._absoluteCache[resourceBase][resourceSpecific];
+    }
+    private cacheAbsoluteURL(url): Observable<NamedAPIResourceReference> {
+        const resourceBase = url.split(this.url)[1].split('/')[0];
+        return this.http.get(url).pipe(map(response => response.json()), map((e) => resourceBase === 'classes' ? this.classPipe(e) : e));
     }
 
     public getAbsoluteURL(url: string): Observable<NamedAPIResourceReference> {
-
-        if (!this.checkAbsoluteCache(url)) {
-            this.cacheAbsoluteURL(url);
+        let cache = this.checkAbsoluteCache(url);
+        if (!cache) {
+            cache = this.cacheAbsoluteURL(url);
         }
+        return cache;
+    }
 
-        return this.checkAbsoluteCache(url) || null;
+    public getQuery(url): Observable<NamedAPIResourceReference> {
+        return this.http.get(url).pipe(
+            map(response => response.json().results[0])
+        );
+    }
+
+    public getSkills(name): any {
+        return this.getQuery(`${this.url}skills/?name${name}`).pipe(take(1),
+            map(e => this.getAbsoluteURL(e.url)));
     }
 }
 
